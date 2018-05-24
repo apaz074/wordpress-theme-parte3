@@ -33,9 +33,6 @@
     'show_in_nav_menus' => true,
     'show_tagcloud' => true,
   );
-
-  //a que tipo de post queremos aplicar nuestra taxonomia personalizada -> array( 'a_post_type' ) lo definimos.
-
   register_taxonomy( 'a_taxonomy', array( 'a_post_type' ), $args );
 }
 

@@ -54,8 +54,7 @@ function custom_post_type() {
     'publicly_queryable' => true,
     'capability_type' => 'page',
   );
-//Para WP el parámentro a_post_type es el argumento que le pasamos para saber que tipo de post se trata
-//Es el nombre genérico
+
   register_post_type( 'a_post_type', $args );
 }
 

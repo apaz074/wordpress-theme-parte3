@@ -8,7 +8,19 @@
         ) );
     ?>
     <div>
-      <small>&copy; <?php echo date('Y'); ?> por @jonmircha</small>
+        <p>
+          <small>
+            <?php
+              if ( get_option('mawt_footer_text') !== '' ):
+              echo esc_html( get_option( 'mawt_footer_text' ) );
+              else:
+            ?>
+              &copy; <?php echo date('Y'); ?> por @jonmircha
+            <?php
+              endif;
+            ?>
+          </small>
+        </p>
     </div>
   </footer>
   <?php wp_footer(); ?>
