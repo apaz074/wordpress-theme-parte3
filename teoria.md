@@ -41,7 +41,7 @@ add_action('admin_menu', 'mawt_custom_theme_options_menu');
 
 Formulario de nuestro menu
 
-`'custom_theme_options'` Es el nombre con el que enlazamos desde nuestro menú del dashboar hasta este formulario `function mawt_custom_theme_options_form ()`
+`'custom_theme_options'` Es el nombre con el que enlazamos desde nuestro menú del dashboar hasta este formulario `function mawt_custom_theme_options_form ()
 
 ````html
 
@@ -70,3 +70,32 @@ if ( !function_exists('mawt_custom_theme_options_form') ):
   }
 endif;
 ````
+
+## 3 Formulario de menu de ajuste
+
+
+`<div class="wrap">` Es una clase que usa WP para formatear sus elementos.
+
+
+Para enviar nuestro formulario usaremos la función de WP ``submit_button();``
+
+```html
+<div class="wrap">
+      <h1><?php _e('Ajustes y Opciones del Tema', 'mawt'); ?></h1>
+      <form action="options.php" method="post">
+        <?php
+          settings_fields('mawt_options_group');
+          do_settings_sections( 'mawt_options_group' );
+        ?>
+        <table class="form-table">
+          <tr valign="top">
+            <th scope="row">Texto del Footer:</th>
+            <td>
+              <input type="text" name="mawt_footer_text" value="<?php echo esc_attr( get_option('mawt_footer_text') ); ?>">
+            </td>
+          </tr>
+        </table>
+        <?php submit_button(); ?>
+      </form>
+    </div>
+```
