@@ -161,3 +161,14 @@ Enlaces para este apartado
 
 [Interactuar con la BBDD de WP](https://codex.wordpress.org/Class_Reference/wpdb)
 [Clases para la BBDD](https://developer.wordpress.org/reference/classes/wpdb/)
+
+## 7 Creando tabla de contacto
+
+Para que tenga los mismo estilos dashboard de WP en la tabla que tenemos que crear
+
+````html
+<table class="wp-list-table widefat striped">
+````
+
+
+
