@@ -155,3 +155,9 @@ value="<?php echo esc_attr( get_option('mawt_footer_text') ); ?>">
 Nos traemos la opcion que acabamos de crear. Si está vacia ponemos por defecto el texto original. Sino, imprimimos el texto que hemos introducido.
 
 Para ver todas las opciones generales de WP dentro del administrador debemos de meter esta url `http://localhost:8888/mitema/wp-admin/options.php`
+
+## 6 Creando menú de contacto
+Enlaces para este apartado
+
+[Interactuar con la BBDD de WP](https://codex.wordpress.org/Class_Reference/wpdb)
+[Clases para la BBDD](https://developer.wordpress.org/reference/classes/wpdb/)
