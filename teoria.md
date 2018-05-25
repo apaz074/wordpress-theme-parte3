@@ -135,3 +135,23 @@ Para que nos imprima el valor que hemos establecido en nuestros "Ajustes del tem
 ````html
 value="<?php echo esc_attr( get_option('mawt_footer_text') ); ?>">
 ````
+
+## 5 Imprimir la variable registrada en nuestro tema
+
+````html
+        <small>
+            <?php
+              if ( get_option('mawt_footer_text') !== '' ):
+              echo esc_html( get_option( 'mawt_footer_text' ) );
+              else:
+            ?>
+              &copy; <?php echo date('Y'); ?> por @jonmircha
+            <?php
+              endif;
+            ?>
+        </small>
+````
+
+Nos traemos la opcion que acabamos de crear. Si está vacia ponemos por defecto el texto original. Sino, imprimimos el texto que hemos introducido.
+
+Para ver todas las opciones generales de WP dentro del administrador debemos de meter esta url `http://localhost:8888/mitema/wp-admin/options.php`
