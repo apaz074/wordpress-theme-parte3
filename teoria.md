@@ -99,3 +99,39 @@ Para enviar nuestro formulario usaremos la función de WP ``submit_button();``
       </form>
     </div>
 ```
+
+# 4 Registrar opciones de menú en options
+
+Para registrarla en el menú de administración debemos registrarla en este evento `add_action('admin_init', 'mawt_custom_theme_options_register');
+`
+
+
+
+````php
+<?
+if ( !function_exists('mawt_custom_theme_options_register') ):
+  function mawt_custom_theme_options_register () {
+    //un registro por opción
+    register_setting('mawt_options_group', 'mawt_footer_text' );
+  }
+endif;
+
+add_action('admin_init', 'mawt_custom_theme_options_register');
+````
+
+En el formulario debemos se deben poner estas opciones. En la primera función le decimos al formulario que ejecute el paquete de opciones
+`settings_fields('mawt_options_group');` __mawt_options_group__ y la segunda función sirve para volver a la pagina previa dentro del dashboard `do_settings_sections( 'mawt_options_group' );`
+
+`````html
+ <form action="options.php" method="post">
+        <?php
+          settings_fields('mawt_options_group');
+          do_settings_sections( 'mawt_options_group' );
+        ?>
+        <table class="form-table">
+`````
+
+Para que nos imprima el valor que hemos establecido en nuestros "Ajustes del tema" tenemos que escribir en el valor __value__ del campo inpunt tenemos que poner esta función
+````html
+value="<?php echo esc_attr( get_option('mawt_footer_text') ); ?>">
+````
