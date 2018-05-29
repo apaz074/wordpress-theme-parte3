@@ -134,7 +134,11 @@ endif;
 add_action('init', 'mawt_contact_form_save');
 
 ````
+## Redireccionar nuestro formulario y solucionar error 404
 
-
-
-
+Todo el sistema de plantillas de WP se hace por GET y nosotros estamos mandando nuestro formulario por POST. Por lo tanto, cuando enviamos el formulario WP nos da un error 404.
+Para solucionarlo podemos crear una página tipo __gracias por tus comentarios__ y redireccionar el formulario hacia nuestra página. 
+Una vez creada la página de agradecimiento podemos redirigir nuestro formulario, después de insertar los datos en la BBDD que vaya hacia nuestra página de agradecimiento.
+Para poder identificar la url correctamente creamos la variable `$url` y la rellenamos con nuestra página de agradecimiento ` $url = get_page_by_title( 'gracias' );`que obtenemos mediante el nombre que le hemos dado.
+Luego usamos la función de WP __wp_redirect()__ y le pasamos los parámetros necesarios `wp_redirect( get_permalink( $url->ID ));` 
+__exit()__ es para que no procese nada más.
