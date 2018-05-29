@@ -81,7 +81,10 @@ La teoría de la especialidad se encuentra en los siguientes archivos MarkDown:
   * Eliminando registros en el Dashboard.
   * JS, jQuery y AJAX para WordPress.
 * Flujos de Trabajo en WordPress.
-  * Starter Themes.
+  * [Starter Themes](https://betabeers.com/blog/starter-themes-wordpress-355/).
+    * [Underscores](http://underscores.me/).
+    * [HTML5 Blank](http://html5blank.com/).
+    * [Sage](https://roots.io/sage/).
   * WordPress y Node.js.
 
 ### 4) Creando mi primer tema profesional.
