@@ -142,3 +142,178 @@ Una vez creada la página de agradecimiento podemos redirigir nuestro formulario
 Para poder identificar la url correctamente creamos la variable `$url` y la rellenamos con nuestra página de agradecimiento ` $url = get_page_by_title( 'gracias' );`que obtenemos mediante el nombre que le hemos dado.
 Luego usamos la función de WP __wp_redirect()__ y le pasamos los parámetros necesarios `wp_redirect( get_permalink( $url->ID ));` 
 __exit()__ es para que no procese nada más.
+
+## Visualizar los datos recogidos por el formulario en nuestro Dashboard
+
+Recogemos los datos de la tabla de la BBDD 
+````php
+<? 
+global $wpdb;
+    //prefix es wp_ el prefijo de WP en la BBDD
+   $table = $wpdb->prefix . 'contact_form';
+   //Nos creamos filas para traernos los datos.
+   $rows = $wpdb->get_results( "SELECT * FROM $table", ARRAY_A );
+````
+
+Por medio de la función `get_results(Sentecia SQL, Arreglo asociativo)`
+Se aconseja usar __var_dump()__ para ver el valor de las variables
+
+`  // echo '<pre>';
+  //   var_dump($rows);
+  // echo '</pre>';
+`
+Vamos a implementar la función de eliminar para ello HTML 5 trae los campos data y nos vamos a valer de ellos para saber que registro queremos eliminar
+
+`data-contact-id="<?php echo $row['contact_id']; ?>`
+
+```html
+<a href="#" class="u-delete" data-contact-id="<?php echo $row['contact_id']; ?>">
+                  Eliminar
+                </a>
+```
+
+````php
+<?
+
+if ( !function_exists('mawt_contact_form_comments') ):
+  function mawt_contact_form_comments () {
+?>
+    <div class="wrap">
+      <h1><?php _e('Comentarios de la página de Contacto', 'mawt'); ?></h1>
+      <table class="wp-list-table widefat striped">
+        <thead>
+          <tr>
+            <th class="manage-column"><?php _e('Id', 'mawt'); ?></th>
+            <th class="manage-column"><?php _e('Nombre', 'mawt'); ?></th>
+            <th class="manage-column"><?php _e('Email', 'mawt'); ?></th>
+            <th class="manage-column"><?php _e('Asunto', 'mawt'); ?></th>
+            <th class="manage-column"><?php _e('Comentarios', 'mawt'); ?></th>
+            <th class="manage-column"><?php _e('Fecha', 'mawt'); ?></th>
+            <th class="manage-column"><?php _e('Eliminar', 'mawt'); ?></th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+            global $wpdb;
+            $table = $wpdb->prefix . 'contact_form';
+            $rows = $wpdb->get_results( "SELECT * FROM $table", ARRAY_A );
+              // echo '<pre>';
+              //   var_dump($rows);
+              // echo '</pre>';
+              foreach ( $rows as $row ):
+          ?>
+            <tr>
+              <td><?php echo $row['contact_id']; ?></td>
+              <td><?php echo $row['name']; ?></td>
+              <td><?php echo $row['email']; ?></td>
+              <td><?php echo $row['subject']; ?></td>
+              <td><?php echo $row['comments']; ?></td>
+              <td><?php echo $row['contact_date']; ?></td>
+              <td>
+                <a href="#" class="u-delete" data-contact-id="<?php echo $row['contact_id']; ?>">
+                  Eliminar
+                </a>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
+<?php
+  }
+endif;
+````
+
+## Dandole funcionalidad AJAX
+
+
+Vamos a registrar el scripts para la parte de administración.
+
+Observamos que registramos los archivos JS no en el frontend sino en la parte de administración 
+
+`wp_register_script( 'contact-form-admin-script', get_template_directory_uri() . '/js/contact_form_admin.js', array('jquery'), '1.0.0', true );` contact-form-__admin__-scrip.
+
+Esta función es __superpoderosa__ pues nos permite pasar valores de WP a JS 
+
+__admin-ajax.php__ Es creado para las interacciones entre el front y el backend. Necesitamos pasarle esa URL para trabajar con ajax ya que vamos a usar esa ruta `'ajax_url' => admin_url('admin-ajax.php')`.
+
+
+
+````php
+<?
+ //Permita pasar valores de PHP a JS en notación de Objeto
+    wp_localize_script(
+      'contact-form-admin-script',
+      'contact_form',
+      array(
+        'name' => 'Módulo de Comentarios de Contacto',
+        'ajax_url' => admin_url('admin-ajax.php')
+      )
+    );
+````
+
+
+````php
+<?
+if ( !function_exists( 'mawt_contact_admin_scripts' ) ):
+  function mawt_contact_admin_scripts () {
+    wp_register_script( 'contact-form-admin-script', get_template_directory_uri() . '/js/contact_form_admin.js', array('jquery'), '1.0.0', true );
+
+    wp_enqueue_script( 'contact-form-admin-script' );
+
+    //Permita pasar valores de PHP a JS en notación de Objeto
+    wp_localize_script(
+      'contact-form-admin-script',
+      'contact_form',
+      array(
+        'name' => 'Módulo de Comentarios de Contacto',
+        'ajax_url' => admin_url('admin-ajax.php')
+      )
+    );
+  }
+endif;
+
+add_action('admin_enqueue_scripts', 'mawt_contact_admin_scripts');
+````
+
+Script que debemos incluir para darle una funcionalidad ajax a la hora de eliminar los registros de contacto.
+Lo primero es registrar el formulario `c(contact_form)`
+
+WP usa el Ajax de Jquery en la parte administrativa.
+
+````javascript
+c(contact_form)
+
+  d.addEventListener('click', e => {
+    if (e.target.matches('.u-delete')) {
+      e.preventDefault()
+      //c(e.target.dataset.contactId)
+
+      let id = e.target.dataset.contactId,
+        confirmDelete = confirm(`¿Estas seguro de eliminar el comentario con el ID ${id}?`)
+
+      if (confirmDelete) {
+        $.ajax({
+          type: 'post',
+          data: {
+            'id': id,
+            'action': 'mawt_contact_form_delete'
+          },
+          url: contact_form.ajax_url,
+          success: data => {
+            c(data)
+            let res = JSON.parse(data)
+            if (!res.err) {
+              let selectorId = '[data-contact-id="' + id + '"]'
+              c(selectorId)
+              d.querySelector(selectorId).parentElement.parentElement.remove()
+            }
+          }
+        })
+      } else {
+        return false;
+      }
+    }
+  })
+})(document, console.log, jQuery.noConflict());
+````
