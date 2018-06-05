@@ -317,3 +317,122 @@ c(contact_form)
   })
 })(document, console.log, jQuery.noConflict());
 ````
+## Progamando el evento del botón eliminar
+
+Vamos a delegar eventos para que cuando el objeto que origino el evento sea el que nosotros quedamos.
+
+`d.addEventListener('click', e => {...}` Evento click de todo el documento.
+
+Vamos a validarlo solo cual se active el selector que nosotros queramos y lo hacemos mediante una sentencia if `if (e.target.matches('.u-delete')` __u-delete__ es un selector válido css y podemos definir cualquiera.
+
+Esta sentencia encapsula el identificador en un contendor dataset `let id = e.target.dataset.contactId,` y guardamos el __id__ en una variable local. Además creamos una alerta de confirmación para estar seguros si queremos seguir adelante.
+
+````javascript
+ let id = e.target.dataset.contactId,
+ confirmDelete = confirm(`¿Estas seguro de eliminar el comentario con el ID ${id}?`)
+ //${id} Template string
+````
+
+Llamamos el método Ajax de jquery y la petición la solicitamos por POST
+
+`````javascript
+if (confirmDelete) {
+        $.ajax({
+          type: 'post',
+          data: {
+            'id': id,
+            'action': 'mawt_contact_form_delete'
+          },
+          url: contact_form.ajax_url,
+          success: data => {
+            c(data)
+            let res = JSON.parse(data)
+            if (!res.err) {
+              let selectorId = '[data-contact-id="' + id + '"]'
+              c(selectorId)
+              d.querySelector(selectorId).parentElement.parentElement.remove()
+            }
+          }
+        });
+`````
+Mandamos los datos con el id y la acción a ejecutar
+
+````javascript
+data: {
+             'id': id,
+             'action': 'mawt_contact_form_delete'
+           }
+```
+
+
+Destino de la acción ajax `url: contact_form.ajax_url` 
+
+Si la operación tuvo exito 
+
+````javascript
+data: {
+             'id': id,
+             'action': 'mawt_contact_form_delete'
+           }
+````` 
+
+Escribimos ahora la función PHP que va a llevar a cabo la operación solicitada por ajax. Los datos va a ser solicitados por POST `if ( isset($_POST['id']) ):`
+
+````php
+<?
+if ( !function_exists('mawt_contact_form_delete') ):
+  function mawt_contact_form_delete () {
+    if ( isset($_POST['id']) ):
+      global $wpdb;
+
+      $table = $wpdb->prefix . 'contact_form';
+      //Guardamos la ejecucción  y pasamos la tabla de donde se va a eliminar contenida en la variable $table, el campo de donde vamos a eliminar y el valor identificatibo.
+      //array('%d') validación y mascara de mysql
+      $delete_row = $wpdb->delete($table, array( 'contact_id' => $_POST['id'] ), array('%d'));
+
+      //Si no hubo error (y tubo exito) entramos en este if
+      if ( $delete_row ) {
+        //Creamos la variable respuesta que es un arreglo con error a false y comentario concatenado con el id de POST
+          $response = array(
+          'err' => false,
+          'msg' => 'Se elimino el comentario con el ID ' . $_POST['id']
+        );
+          //En caso contrario err es verdadero con mensaje coherente
+      } else {
+        $response = array(
+          'err' => true,
+          'msg' => 'NO se elimino el comentario con el ID ' . $_POST['id']
+        );
+      }
+
+      //Cuando trabajomos con peticiones AJAX tenemos que usar el método die(...)
+      //como es objeto la decodificamos como Json y JS lo entienda como un objeto de JS
+      die( json_encode($response) );
+    endif;
+  }
+endif;
+````
+
+##Detalles finales del botón eliminar
+
+` let res = JSON.parse(data)` Le decimos que codifique este string a un objeto de javascript
+
+`if (!res.err)` si la propiedad es falsa vamos a eliminar el enlace
+
+` let selectorId = '[data-contact-id="' + id + '"]'` Dinamicamente vamos a registar su ID para seleccionarlo con el atributo ID
+
+Para eliminar toda la fila le pasamos el abuelo __selectorId__ y eliminamos todos los descendientes __.parentElement.parentElement.remove()__
+
+````javascript
+ success: data => {
+            c(data)
+            
+            let res = JSON.parse(data)
+            if (!res.err) {
+              let selectorId = '[data-contact-id="' + id + '"]'
+              c(selectorId)
+              d.querySelector(selectorId).parentElement.parentElement.remove()
+            }
+          }
+        })
+````
