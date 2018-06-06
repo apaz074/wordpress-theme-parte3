@@ -86,5 +86,27 @@ La teoría de la especialidad se encuentra en los siguientes archivos MarkDown:
     * [HTML5 Blank](http://html5blank.com/).
     * [Sage](https://roots.io/sage/).
   * WordPress y Node.js.
+    * [Node.js](https://nodejs.org/en/)
+    * [NVM](https://github.com/creationix/nvm)
+    * [NVM para Windows](https://github.com/coreybutler/nvm-windows)
 
-### 4) Creando mi primer tema profesional.
+### 4) Creando mi primer Tema para WordPress.
+
+* Planificación del tema:
+  * Definiendo la plantilla HTML básica del tema.
+  * Volviendo dinámica la plantilla con PHP.
+  * Dividiendo la plantilla y creando la estructura de carpetas y archivos.
+  * Definiendo zonas comúnes del tema.
+  * Automatizando las tareas del desarrollo para la creación del tema.
+* Integración de funciones básicas:
+  * Imprimiendo contenido
+  * Agregando las funciones básicas del tema.
+  * Creación e invocación de Menús.
+  * Creación e invocación de Widgets.
+* Integración de funciones avanzadas:
+  * Agregando elementos interactivos.
+  * Personalización y opciones avanzadas.
+* Maquetación y Programación del tema:
+  * CSS al servicio de WordPress.
+  * Arquitectura orientada a Componentes y WordPress.
+  * Maquetando y Programando para WordPress.
