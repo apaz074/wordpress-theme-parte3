@@ -21,7 +21,7 @@
             <li><a href="#">Sección 2</a></li>
             <li><a href="#">Sección 3</a></li>
             <li><a href="#">Sección 4</a></li>
-            <li><a href="#">Sección 5</a></li>
+            <li><a href="#">Sección 6</a></li>
           </ul>
         </nav>
       </section>
@@ -29,7 +29,7 @@
     <section class="Content">
       <div class="Content-container">
         <main class="Main">
-          <h2>Contenido Principal</h2>
+          <h2>Contenido Principal hola</h2>
           <p>
             Lorem ipsum, dolor sit amet consectetur adipisicing elit. Omnis reprehenderit, obcaecati voluptatum aliquid hic dolorem perspiciatis iure? Vero architecto eius earum aliquid porro doloribus voluptate. Id debitis tempora tenetur deleniti?
           </p>

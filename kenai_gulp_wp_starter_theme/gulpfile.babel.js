@@ -21,7 +21,7 @@ const reload = browserSync.reload,
     './**/*.php'
   ],
   proxyOptions = {
-    proxy: 'localhost:8080/perros/',
+    proxy: 'localhost:8888/mitema/',
     notify: false
   },
   imageminOptions = {

@@ -16,7 +16,7 @@ msgstr ""
 
 #: index.php:38
 msgid "Hola"
-msgstr "Hello"
+msgstr ""
 
 #: index.php:60
 msgid "Adios"
